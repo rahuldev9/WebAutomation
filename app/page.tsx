@@ -33,15 +33,7 @@ export default function UserForm() {
         body: JSON.stringify(payload),
       });
 
-      const webhookurl = "https://rahul9494.app.n8n.cloud/webhook/sent-email";
-      await fetch(webhookurl, {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload), // <-- send the same payload!
-      });
+      await SendWebhook();
 
       setMessage("✅ Saved successfully!");
     } catch (err) {
@@ -51,28 +43,37 @@ export default function UserForm() {
     }
   };
 
-  const SendWebhook = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const SendWebhook = async () => {
     setLoading(true);
-    setMessage("");
+    setWebhook("");
 
     try {
-      const webhookurl = "https://rahul9494.app.n8n.cloud/webhook/sent-email";
-      await fetch(webhookurl, {
+      const webhookUrl = "https://rahul9494.app.n8n.cloud/webhook/sent-email";
+
+      // Send the Name and Email as payload
+      const payload = { Name, Email };
+
+      const response = await fetch(webhookUrl, {
         method: "POST",
-        mode: "no-cors",
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify(payload),
       });
 
-      setWebhook("✅ sent email successfully!");
+      if (!response.ok) {
+        throw new Error("Webhook request failed");
+      }
+
+      setWebhook("✅ Sent email successfully!");
     } catch (err) {
-      setMessage("⚠️ Failed to save.");
+      console.error(err);
+      setWebhook("⚠️ Failed to send email.");
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-100 to-purple-200">
       <form
