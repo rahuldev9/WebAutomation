@@ -5,6 +5,7 @@ export default function UserForm() {
   const [Name, setName] = useState("");
   const [Email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [Webhook, setWebhook] = useState("");
 
   const [message, setMessage] = useState("");
 
@@ -32,6 +33,16 @@ export default function UserForm() {
         body: JSON.stringify(payload),
       });
 
+      const webhookurl = "https://rahul9494.app.n8n.cloud/webhook/sent-email";
+      await fetch(webhookurl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload), // <-- send the same payload!
+      });
+
       setMessage("✅ Saved successfully!");
     } catch (err) {
       setMessage("⚠️ Failed to save.");
@@ -40,6 +51,28 @@ export default function UserForm() {
     }
   };
 
+  const SendWebhook = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const webhookurl = "https://rahul9494.app.n8n.cloud/webhook/sent-email";
+      await fetch(webhookurl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      setWebhook("✅ sent email successfully!");
+    } catch (err) {
+      setMessage("⚠️ Failed to save.");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-100 to-purple-200">
       <form
@@ -83,6 +116,15 @@ export default function UserForm() {
             }`}
           >
             {message}
+          </p>
+        )}
+        {Webhook && (
+          <p
+            className={`text-center font-medium ${
+              Webhook.includes("✅") ? "text-green-600" : "text-red-600"
+            }`}
+          >
+            {Webhook}
           </p>
         )}
       </form>
