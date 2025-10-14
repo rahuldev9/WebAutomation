@@ -48,7 +48,7 @@ export default function UserForm() {
     setWebhook("");
 
     try {
-      const webhookUrl = "https://rahul9494.app.n8n.cloud/webhook/sent-email";
+      const webhookUrl = "https://75ca6ecc0759.ngrok-free.app/webhook-test/email";
 
       // Send the Name and Email as payload
       const payload = { Name, Email };
