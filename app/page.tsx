@@ -13,7 +13,7 @@ export default function HomePage() {
   const [status, setStatus] = useState<string>("");
 
   // 👇 Replace this with your n8n webhook URL
-  const webhookUrl = "https://09979dcbe803.ngrok-free.app/webhook/chat";
+  const webhookUrl = "/";
 
   const sendMessage = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
